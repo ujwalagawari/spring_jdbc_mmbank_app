@@ -5,11 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.moneymoney.account.dao.SavingsAccountDAO;
-import com.moneymoney.account.dao.SavingsAccountDAOImpl;
 import com.moneymoney.account.factory.AccountFactory;
-import com.moneymoney.account.util.DBUtil;
 import com.moneymoney.pojo.account.SavingsAccount;
 import com.moneymoney.pojo.exception.AccountNotFoundException;
 import com.moneymoney.pojo.exception.InsufficientFundsException;
@@ -18,16 +17,17 @@ import com.moneymoney.pojo.exception.InvalidInputException;
 @Service
 public class SavingsAccountServiceImpl implements SavingsAccountService {
 
-	
+	@Autowired
 	private AccountFactory factory;
 	
 	@Autowired
 	private SavingsAccountDAO savingsAccountDAO;
 
 	
-	  public SavingsAccountServiceImpl() { 
-		  factory = AccountFactory.getInstance();
-	  }
+	/*
+	 * public SavingsAccountServiceImpl() { factory = AccountFactory.getInstance();
+	 * }
+	 */
 	 
 
 	@Override
@@ -67,20 +67,12 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
 		}
 	}
 
+	@Transactional
 	@Override
-	public void fundTransfer(SavingsAccount sender, SavingsAccount receiver, double amount)
-			throws ClassNotFoundException, SQLException {
-		try {
-			withdraw(sender, amount);
-			deposit(receiver, amount);
-			DBUtil.commit();
-		} catch (InvalidInputException | InsufficientFundsException e) {
-			e.printStackTrace();
-			DBUtil.rollback();
-		} catch(Exception e) {
-			e.printStackTrace();
-			DBUtil.rollback();
-		}
+	public void fundTransfer(SavingsAccount sender, SavingsAccount receiver, double amount) throws ClassNotFoundException, SQLException {		
+		withdraw(sender, amount);
+		deposit(receiver, amount);
+			
 	}
 
 	@Override

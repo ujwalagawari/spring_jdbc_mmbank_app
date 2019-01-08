@@ -87,7 +87,7 @@ public class SavingsAccountSJDAOImpl implements SavingsAccountDAO{
 
 	@Override
 	public void commit() throws SQLException {
-		DBUtil.commit();
+		//DBUtil.commit();
 	}
 
 	@Override

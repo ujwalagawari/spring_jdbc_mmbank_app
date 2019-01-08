@@ -82,11 +82,6 @@ public class AccountCUI {
 			selectOrderOfSort();
 			break;
 		case 11:
-			try {
-				DBUtil.closeConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 			System.exit(0);
 			break;
 		default:
@@ -326,20 +321,10 @@ public class AccountCUI {
 		try {
 			savingsAccount = savingsAccountService.getAccountById(accountNumber);
 			savingsAccountService.deposit(savingsAccount, amount);
-			DBUtil.commit();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
-			try {
-				DBUtil.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
 		} catch (Exception e) {
-			try {
-				DBUtil.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			e.printStackTrace();
 		}
 	}
 
@@ -352,20 +337,10 @@ public class AccountCUI {
 		try {
 			savingsAccount = savingsAccountService.getAccountById(accountNumber);
 			savingsAccountService.withdraw(savingsAccount, amount);
-			DBUtil.commit();
 		} catch (ClassNotFoundException | SQLException | AccountNotFoundException e) {
-			try {
-				DBUtil.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
 			e.printStackTrace();
 		} catch (Exception e) {
-			try {
-				DBUtil.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			e.printStackTrace();
 		}
 	}
 
